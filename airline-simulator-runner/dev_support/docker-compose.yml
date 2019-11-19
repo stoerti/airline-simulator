@@ -1,0 +1,17 @@
+version: '3'
+services:
+  axon-server:
+    image: axoniq/axonserver
+    environment:
+      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+  postgres:
+    image: "postgres"
+    environment:
+      - POSTGRES_USER=airlinesim
+      - POSTGRES_PASSWORD=airlinesim
+      - POSTGRES_DB=airlinesim
+    ports:
+      - "5432:5432"
