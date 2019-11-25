@@ -45,10 +45,13 @@
 	</dependencies>
 
 	<modules>
-		<module>airline-simulator-flightmanager</module>
-		<module>airline-simulator-flight-api</module>
-		<module>airline-simulator-runner</module>
-		<module>airline-simulator-agents</module>
-		<module>airline-simulator-flighttracker-service</module>
+		<module>flightmanager</module>
+		<module>flight-api</module>
+		<module>runner</module>
+		<module>agents</module>
+		<module>flighttracker-service</module>
+		<module>ui</module>
+		<module>fleet-api</module>
+		<module>fleet-manager</module>
 	</modules>
 </project>
