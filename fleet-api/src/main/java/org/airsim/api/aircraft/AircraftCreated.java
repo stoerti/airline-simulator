@@ -9,12 +9,11 @@ import lombok.Value;
 @Builder
 @Value
 @RequiredArgsConstructor
-public class AircraftTypeCreated {
+public class AircraftCreated {
 
 	private final UUID id;
 	
+	private final UUID type;
 	private final String code;
-	private final String name;
-	private final int seats;
 
 }

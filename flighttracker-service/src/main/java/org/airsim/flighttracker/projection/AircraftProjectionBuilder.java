@@ -1,16 +1,16 @@
-package de.airsim.projection.aircraft;
+package org.airsim.flighttracker.projection;
 
 import javax.transaction.Transactional;
 
-import org.airsim.api.aircraft.AircraftTypeCreated;
-import org.airsim.api.aircrafttype.AircraftCreated;
+import org.airsim.api.aircraft.AircraftCreated;
+import org.airsim.api.aircrafttype.AircraftTypeCreated;
+import org.airsim.flighttracker.projection.jpa.AircraftEntity;
+import org.airsim.flighttracker.projection.jpa.AircraftRepository;
+import org.airsim.flighttracker.projection.jpa.AircraftTypeEntity;
+import org.airsim.flighttracker.projection.jpa.AircraftTypeRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
 
-import de.airsim.projection.aircraft.jpa.AircraftEntity;
-import de.airsim.projection.aircraft.jpa.AircraftRepository;
-import de.airsim.projection.aircraft.jpa.AircraftTypeEntity;
-import de.airsim.projection.aircraft.jpa.AircraftTypeRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component

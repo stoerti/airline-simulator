@@ -1,10 +1,9 @@
-package de.airsim.projection.aircraft.jpa;
+package org.airsim.flighttracker.projection.jpa;
 
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,12 +15,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AircraftEntity {
-	
+public class AircraftTypeEntity {
+
 	@Id
 	private UUID id;
-	
-	@ManyToOne
-	private AircraftTypeEntity type;
+
 	private String code;
+	private String name;
+	private int seats;
+
+	private int legroom;
+	private boolean hasWiFi;
+	private boolean hasSeatPower;
+	private boolean hasEntertainment;
 }

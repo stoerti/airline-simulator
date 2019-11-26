@@ -1,6 +1,8 @@
-package org.airsim.api.aircrafttype;
+package org.airsim.api.aircraft;
 
 import java.util.UUID;
+
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +11,10 @@ import lombok.Value;
 @Builder
 @Value
 @RequiredArgsConstructor
-public class AircraftCreated {
-
+public class CreateAircraftCommand {
+	
+	
+	@TargetAggregateIdentifier
 	private final UUID id;
 	
 	private final UUID type;

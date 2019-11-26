@@ -1,11 +1,11 @@
-package de.airsim.domain.aircrafttype;
+package org.airsim.domain.aircrafttype;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import java.util.UUID;
 
-import org.airsim.api.aircraft.AircraftTypeCreated;
-import org.airsim.api.aircraft.CreateAircraftTypeCommand;
+import org.airsim.api.aircrafttype.AircraftTypeCreated;
+import org.airsim.api.aircrafttype.CreateAircraftTypeCommand;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -34,6 +34,10 @@ public class AircraftTypeAggregate {
 			.code(command.getCode())
 			.name(command.getName())
 			.seats(command.getSeats())
+			.hasWiFi(command.isHasWiFi())
+			.hasSeatPower(command.isHasSeatPower())
+			.hasEntertainment(command.isHasEntertainment())
+			.legroom(command.getLegroom())
 			.build());
 	}
 	

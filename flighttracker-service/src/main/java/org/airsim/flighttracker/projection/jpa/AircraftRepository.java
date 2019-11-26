@@ -1,4 +1,4 @@
-package de.airsim.projection.aircraft.jpa;
+package org.airsim.flighttracker.projection.jpa;
 
 import java.util.UUID;
 

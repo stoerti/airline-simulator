@@ -41,6 +41,7 @@ return (
               <TableCell align="right">To</TableCell>
               <TableCell align="right">Time</TableCell>
               <TableCell align="right">Duration</TableCell>
+              <TableCell align="right">Aircraft Type</TableCell>
               <TableCell align="right">Status</TableCell>
             </TableRow>
           </TableHead>
@@ -50,10 +51,11 @@ return (
                 <TableCell component="th" scope="row">
                   {row.flightNumber}
                 </TableCell>
-                <TableCell align="right">{row.airportFrom}</TableCell>
-                <TableCell align="right">{row.airportTo}</TableCell>
+                <TableCell align="right">{row.airportFrom.city} ({row.airportFrom.iataCode})</TableCell>
+                <TableCell align="right">{row.airportTo.city} ({row.airportTo.iataCode})</TableCell>
                 <TableCell align="right">{row.takeoffTime}</TableCell>
                 <TableCell align="right">{row.duration}</TableCell>
+                <TableCell align="right">{row.aircraftType.name}</TableCell>
                 <TableCell align="right">{row.flightStatus}</TableCell>
               </TableRow>
             ))}

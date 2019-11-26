@@ -16,6 +16,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.airsim</groupId>
+			<artifactId>fleet-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.axonframework</groupId>

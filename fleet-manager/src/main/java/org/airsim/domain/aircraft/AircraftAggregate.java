@@ -1,11 +1,11 @@
-package de.airsim.domain.aircraft;
+package org.airsim.domain.aircraft;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import java.util.UUID;
 
-import org.airsim.api.aircrafttype.AircraftCreated;
-import org.airsim.api.aircrafttype.CreateAircraftCommand;
+import org.airsim.api.aircraft.AircraftCreated;
+import org.airsim.api.aircraft.CreateAircraftCommand;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
