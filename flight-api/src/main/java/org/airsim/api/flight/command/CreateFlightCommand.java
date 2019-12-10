@@ -27,4 +27,6 @@ public class CreateFlightCommand {
 	private LocalDateTime takeoffTime;
 	private Duration duration;
 
+	private int seatsAvailable;
+
 }

@@ -1,6 +1,5 @@
 package org.airsim.domain.flight;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,10 +26,11 @@ public class FlightManager {
 			.isBefore(event.getValidTo().plusDays(1)); currentDate = currentDate.plusDays(1)) {
 			CreateFlightCommand command = CreateFlightCommand
 				.builder()
+				.id(UUID.randomUUID())
 				.flightplanId(event.getId())
 				.takeoffTime(LocalDateTime.of(currentDate, event.getTakeoffTime()))
 				.duration(event.getDuration())
-				.id(UUID.randomUUID())
+				.seatsAvailable(20)
 				.build();
 			
 			commandGateway.send(command);

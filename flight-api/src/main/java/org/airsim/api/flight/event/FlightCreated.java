@@ -26,4 +26,6 @@ public class FlightCreated {
 	private Duration duration;
 	private FlightStatus flightStatus;
 
+	private int seatsAvailable;
+
 }

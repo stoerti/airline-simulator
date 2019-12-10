@@ -28,6 +28,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.airsim</groupId>
+			<artifactId>customer-manager</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.airsim</groupId>
+			<artifactId>booking-manager</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.airsim</groupId>
 			<artifactId>flighttracker-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -22,6 +22,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.airsim</groupId>
+			<artifactId>booking-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.axonframework</groupId>

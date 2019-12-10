@@ -3,8 +3,11 @@ package org.airsim.flighttracker;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.airsim.api.flight.FlightStatus;
 import org.airsim.flighttracker.dto.AircraftType;
+import org.airsim.flighttracker.dto.AircraftTypeSearchResult;
 import org.airsim.flighttracker.dto.Airport;
+import org.airsim.flighttracker.dto.AirportSearchResult;
 import org.airsim.flighttracker.dto.Flight;
 import org.airsim.flighttracker.dto.FlightSearchResult;
 import org.airsim.flighttracker.projection.jpa.AircraftTypeEntity;
@@ -13,6 +16,7 @@ import org.airsim.flighttracker.projection.jpa.AirportEntity;
 import org.airsim.flighttracker.projection.jpa.AirportRepository;
 import org.airsim.flighttracker.projection.jpa.FlightEntity;
 import org.airsim.flighttracker.projection.jpa.FlightRepository;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,15 +35,33 @@ public class FlightTrackerController {
 	private final AircraftTypeRepository aircraftTypeRepository;
 
 	@GetMapping(value = "/flights")
-	public FlightSearchResult getFlights(@RequestParam("page") int page, @RequestParam("pagesize") int pagesize) {
+	public FlightSearchResult getFlights(
+			@RequestParam("page") int page,
+			@RequestParam("pagesize") int pagesize,
+			@RequestParam(name = "airportFrom", required = false) String airportFrom,
+			@RequestParam(name = "airportTo", required = false) String airportTo,
+			@RequestParam(name = "flightStatus", required = false) FlightStatus flightStatus) {
 		List<Flight> result = new ArrayList<>();
+		
+		FlightEntity flightExample = new FlightEntity();
+		if (airportFrom != null) {
+			flightExample.setAirportFrom(airportFrom);
+		}
+		if (airportTo != null) {
+			flightExample.setAirportTo(airportTo);
+		}
+		if (flightStatus != null) {
+			flightExample.setFlightStatus(flightStatus);
+		}
+		
+		Example<FlightEntity> example = Example.of(flightExample);
 
 		Page<FlightEntity> searchResult = flightRepository
-			.findAll(PageRequest.of(page, pagesize, Sort.by("takeoffTime").ascending()));
+			.findAll(example, PageRequest.of(page, pagesize, Sort.by("takeoffTime").ascending()));
 
 		searchResult.forEach(flight -> {
-			AirportEntity airportFrom = airportRepository.findByIataCode(flight.getAirportFrom());
-			AirportEntity airportTo = airportRepository.findByIataCode(flight.getAirportTo());
+			AirportEntity airportEntityFrom = airportRepository.findByIataCode(flight.getAirportFrom());
+			AirportEntity airportEntityTo = airportRepository.findByIataCode(flight.getAirportTo());
 			AircraftTypeEntity aircraftType = aircraftTypeRepository.findByCode(flight.getAircraftTypeCode());
 
 			result
@@ -48,8 +70,8 @@ public class FlightTrackerController {
 					.id(flight.getId())
 					.flightNumber(flight.getFlightNumber())
 					.flightStatus(flight.getFlightStatus())
-					.airportFrom(convert(airportFrom))
-					.airportTo(convert(airportTo))
+					.airportFrom(convert(airportEntityFrom))
+					.airportTo(convert(airportEntityTo))
 					.takeoffTime(flight.getTakeoffTime())
 					.duration(flight.getDuration())
 					.aircraftType(convert(aircraftType))
@@ -57,6 +79,33 @@ public class FlightTrackerController {
 		});
 
 		return new FlightSearchResult(result, searchResult.getNumber(), searchResult.getSize(),
+				searchResult.getTotalElements());
+	}
+
+	@GetMapping(value = "/airports")
+	public AirportSearchResult getAirports(@RequestParam("page") int page, @RequestParam("pagesize") int pagesize) {
+		List<Airport> result = new ArrayList<>();
+
+		Page<AirportEntity> searchResult = airportRepository
+			.findAll(PageRequest.of(page, pagesize, Sort.by("name").ascending()));
+
+		searchResult.forEach(airport -> result.add(convert(airport)));
+
+		return new AirportSearchResult(result, searchResult.getNumber(), searchResult.getSize(),
+				searchResult.getTotalElements());
+	}
+
+	@GetMapping(value = "/aircraftTypes")
+	public AircraftTypeSearchResult getAircraftTypes(@RequestParam("page") int page,
+			@RequestParam("pagesize") int pagesize) {
+		List<AircraftType> result = new ArrayList<>();
+
+		Page<AircraftTypeEntity> searchResult = aircraftTypeRepository
+			.findAll(PageRequest.of(page, pagesize, Sort.by("name").ascending()));
+
+		searchResult.forEach(airport -> result.add(convert(airport)));
+
+		return new AircraftTypeSearchResult(result, searchResult.getNumber(), searchResult.getSize(),
 				searchResult.getTotalElements());
 	}
 
@@ -71,6 +120,7 @@ public class FlightTrackerController {
 			.location(entity.getLocation())
 			.build();
 	}
+
 	private AircraftType convert(AircraftTypeEntity entity) {
 		return AircraftType
 			.builder()

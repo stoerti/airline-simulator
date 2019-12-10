@@ -53,5 +53,9 @@
 		<module>ui</module>
 		<module>fleet-api</module>
 		<module>fleet-manager</module>
+		<module>customer-api</module>
+		<module>booking-api</module>
+		<module>customer-manager</module>
+		<module>booking-manager</module>
 	</modules>
 </project>

@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.airsim.api.aircrafttype.AircraftTypeCreated;
 import org.airsim.api.aircrafttype.CreateAircraftTypeCommand;
 import org.airsim.api.airport.CreateAirportCommand;
+import org.airsim.api.customer.CreateCustomerCommand;
 import org.airsim.api.flightplan.CreateFlightplanCommand;
 import org.airsim.api.flightplan.Weekplan;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -36,18 +37,20 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 		createAirports();
 		createAircrafts();
 		createFlights();
+		createCustomers();
 	}
 
 	private void createFlights() {
 		Integer flightnumberCounter = 1;
-		for (String from : ImmutableList.of("HAM", "FRA", "MUC", "TXL", "CDG")) {
+
+		for (String from : ImmutableList.of("HAM" , "FRA", "MUC", "TXL", "CDG" )) {
 			int j = 0;
-			for (String to : ImmutableList.of("HAM", "FRA", "MUC", "TXL", "CDG")) {
+			for (String to : ImmutableList.of( /*"HAM", "FRA", "MUC", "TXL", */"CDG")) {
 
 				if (from.equals(to))
 					continue;
 
-				for (int i = 1; i < 10; i++) {
+				for (int i = 1; i < 2; i++) {
 
 					CreateFlightplanCommand flightplanCommand = CreateFlightplanCommand
 						.builder()
@@ -56,7 +59,7 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 						.airportFrom(from)
 						.airportTo(to)
 						.aircraftType("A388")
-						.takeoffTime(LocalTime.now().plusMinutes(j + i * 10).plusMinutes(1))
+						.takeoffTime(LocalTime.now().plusMinutes(j + i * 10).plusMinutes(10))
 						.duration(Duration.ofMinutes(5))
 						.validFrom(LocalDate.now())
 						.validTo(LocalDate.now().plusDays(1))
@@ -130,6 +133,21 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 
 		commandGateway
 			.send(CreateAircraftTypeCommand.builder().id(a380id).code("A388").name("Airbus A380").seats(100).build());
+	}
+
+	private void createCustomers() {
+		for (String firstname : ImmutableList.of("Max", "Thomas", "Hans", "Paul", "Anke", "Anja", "Laura", "Sophie")) {
+			for (String lastname : ImmutableList.of("Meier", "Mueller", "Schmidt", "Hummels", "Scholz", "Haupt")) {
+				commandGateway
+					.send(CreateCustomerCommand
+						.builder()
+						.id(UUID.randomUUID())
+						.name(firstname)
+						.lastname(lastname)
+						.emailAddress(firstname + "." + lastname + "@gmail.com")
+						.build());
+			}
+		}
 	}
 
 }
