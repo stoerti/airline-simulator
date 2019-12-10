@@ -60,6 +60,7 @@ public class FlightAggregate {
 			.takeoffTime(command.getTakeoffTime())
 			.duration(command.getDuration())
 			.flightStatus(FlightStatus.PLANNED)
+			.seatsAvailable(command.getSeatsAvailable())
 			.build());
 	}
 	
@@ -104,11 +105,12 @@ public class FlightAggregate {
 		this.flightId = event.getId();
 		this.flightplanId = event.getFlightplanId();
 		this.flightStatus = event.getFlightStatus();
+		this.seatsAvailable = event.getSeatsAvailable();
 	}
 	
 	@CommandHandler
 	public void on(AllocateSeatsCommand cmd) throws FlightSoldOutException {
-		if (getNumberOfAvailableSeats() >= cmd.getNumberOfSeats()) {
+		if (getNumberOfAvailableSeats() < cmd.getNumberOfSeats()) {
 			throw new FlightSoldOutException();
 		}
 		log.info("Allocating {} seats for flight ", cmd.getNumberOfSeats(), flightId);

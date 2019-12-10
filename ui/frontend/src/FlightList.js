@@ -68,11 +68,11 @@ export default function FlightList(props) {
   //     reloadFlights();
   //   }, 1000);
   // });
-  
+
   React.useEffect(() => {
     reloadFlights();
   }, [page, rowsPerPage, filter_airportFrom, filter_airportTo, filter_flightStatus]);
-  
+
   React.useEffect(() => {
     fetch(`http://localhost:8080/airports?page=0&pagesize=1000`)
       .then(response => response.json())
@@ -105,6 +105,7 @@ export default function FlightList(props) {
               <TableCell align="right">Time</TableCell>
               <TableCell align="right">Duration</TableCell>
               <TableCell align="right">Aircraft Type</TableCell>
+              <TableCell align="right">Allocation</TableCell>
               <TableCell align="right">Status</TableCell>
             </TableRow>
           </TableHead>
@@ -135,11 +136,11 @@ export default function FlightList(props) {
                 {airports.elements.map( row => (
                   <MenuItem value={row.iataCode}>{row.city} ({row.iataCode})</MenuItem>
                 ))}
-                </Select>              
+                </Select>
               </TableCell>
-              <TableCell align="right"><input type="text" /></TableCell>
-              <TableCell align="right"><input type="text" /></TableCell>
-              <TableCell align="right"><input type="text" /></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
               <TableCell align="right">
                 <Select
                   labelId="search-flight-status"
@@ -156,8 +157,8 @@ export default function FlightList(props) {
                   <MenuItem value="IN_AIR">In the air</MenuItem>
                   <MenuItem value="LANDED">Landed</MenuItem>
                 </Select>
-
               </TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -172,6 +173,7 @@ export default function FlightList(props) {
                 <TableCell align="right">{row.duration}</TableCell>
                 <TableCell align="right">{row.aircraftType.name}</TableCell>
                 <TableCell align="right">{row.flightStatus}</TableCell>
+                <TableCell align="right">{row.seatsTaken}/{row.seatsAvailable}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -188,5 +190,3 @@ export default function FlightList(props) {
     </div>
   );
 }
-
-

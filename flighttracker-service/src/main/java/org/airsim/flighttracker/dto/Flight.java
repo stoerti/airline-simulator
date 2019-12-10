@@ -31,4 +31,6 @@ public class Flight {
 	private Airport airportTo;
 	private AircraftType aircraftType;
 	private FlightStatus flightStatus;
+	private int seatsAvailable;
+	private int seatsTaken;
 }

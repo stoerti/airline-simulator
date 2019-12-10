@@ -13,6 +13,7 @@ import org.airsim.api.flight.event.CheckInStarted;
 import org.airsim.api.flight.event.FlightCompleted;
 import org.airsim.api.flight.event.FlightCreated;
 import org.airsim.api.flight.event.FlightStarted;
+import org.airsim.api.flight.event.SeatsAllocated;
 import org.airsim.api.flightplan.FlightplanCreated;
 import org.airsim.flighttracker.projection.jpa.FlightEntity;
 import org.airsim.flighttracker.projection.jpa.FlightRepository;
@@ -51,10 +52,22 @@ public class FlightProjectionBuilder {
 					.takeoffTime(event.getTakeoffTime())
 					.duration(event.getDuration())
 					.flightStatus(FlightStatus.PLANNED)
+					.seatsAvailable(event.getSeatsAvailable())
+					.seatsTaken(0)
 					.build());
 		} else {
 			log.error("Flightplan " + event.getFlightplanId() + " not found");
 		}
+	}
+	
+	@EventHandler
+	@Transactional
+	public void on(SeatsAllocated event) {
+		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
+			log.debug("Increasing seat allocations of flight " + flight.getFlightNumber() + " by " + event.getNumberOfSeats());
+			flight.setSeatsTaken(flight.getSeatsTaken() + event.getNumberOfSeats());
+			flightRepository.save(flight);
+		});
 	}
 	
 	@EventHandler

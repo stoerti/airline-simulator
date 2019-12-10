@@ -75,6 +75,8 @@ public class FlightTrackerController {
 					.takeoffTime(flight.getTakeoffTime())
 					.duration(flight.getDuration())
 					.aircraftType(convert(aircraftType))
+					.seatsAvailable(flight.getSeatsAvailable())
+					.seatsTaken(flight.getSeatsTaken())
 					.build());
 		});
 

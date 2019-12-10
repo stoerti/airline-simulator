@@ -31,4 +31,6 @@ public class FlightEntity {
 	private String airportTo;
 	private String aircraftTypeCode;
 	private FlightStatus flightStatus;
+	private Integer seatsAvailable;
+	private Integer seatsTaken;
 }
