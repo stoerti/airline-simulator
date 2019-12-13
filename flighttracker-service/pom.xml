@@ -23,13 +23,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.airsim</groupId>
-			<artifactId>booking-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-
-		<dependency>
 			<groupId>org.axonframework</groupId>
 			<artifactId>axon-spring-boot-starter</artifactId>
 			<version>4.2</version>
