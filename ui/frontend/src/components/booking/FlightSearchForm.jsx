@@ -10,14 +10,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
-
-import './App.css';
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,11 +30,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function FlightList(props) {
+export default function FlightList() {
 
   const [page, setPage] = React.useState(0);
   const [airports, setAirports] = React.useState({ elements: [], totalElements: 0 });
-  const [aircraftTypes, setAircraftTypes] = React.useState({ elements: [], totalElements: 0 });
   const [flights, setFlights] = React.useState({ elements: [], totalElements: 0 });
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
 
@@ -116,26 +109,26 @@ export default function FlightList(props) {
                 <Select
                   labelId="search-airport-from-status"
                   id="search-airport-from-status"
-                 value={filter_airportFrom}
-                 onChange={e => setFilter_airportFrom(e.target.value)}
+                  value={filter_airportFrom}
+                  onChange={e => setFilter_airportFrom(e.target.value)}
                 >
                   <MenuItem value={null}>All</MenuItem>
-                {airports.elements.map( row => (
-                  <MenuItem value={row.iataCode}>{row.city} ({row.iataCode})</MenuItem>
-                ))}
+                  {airports.elements.map(row => (
+                    <MenuItem value={row.iataCode}>{row.city} ({row.iataCode})</MenuItem>
+                  ))}
                 </Select>
               </TableCell>
               <TableCell align="right">
                 <Select
                   labelId="search-airport-to-status"
                   id="search-airport-to-status"
-                 value={filter_airportTo}
-                 onChange={e => setFilter_airportTo(e.target.value)}
+                  value={filter_airportTo}
+                  onChange={e => setFilter_airportTo(e.target.value)}
                 >
                   <MenuItem value={null}>All</MenuItem>
-                {airports.elements.map( row => (
-                  <MenuItem value={row.iataCode}>{row.city} ({row.iataCode})</MenuItem>
-                ))}
+                  {airports.elements.map(row => (
+                    <MenuItem value={row.iataCode}>{row.city} ({row.iataCode})</MenuItem>
+                  ))}
                 </Select>
               </TableCell>
               <TableCell align="right"></TableCell>
@@ -145,8 +138,8 @@ export default function FlightList(props) {
                 <Select
                   labelId="search-flight-status"
                   id="search-flight-status"
-                 value={filter_flightStatus}
-                 onChange={e => setFilter_flightStatus(e.target.value)}
+                  value={filter_flightStatus}
+                  onChange={e => setFilter_flightStatus(e.target.value)}
                 >
                   <MenuItem value={null}>All</MenuItem>
                   <MenuItem value="PLANNED">Planned</MenuItem>

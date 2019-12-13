@@ -1,13 +1,11 @@
 import React from 'react';
 
-
-import './App.css';
 import FlightList from './FlightList';
 
-export default function App() {
+export default function BookingPage() {
 
   return (
-    <div className="App">
+    <div>
       <FlightList />
     </div>
   );

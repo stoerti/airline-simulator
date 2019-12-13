@@ -57,5 +57,6 @@
 		<module>booking-api</module>
 		<module>customer-manager</module>
 		<module>booking-manager</module>
+		<module>booking-service</module>
 	</modules>
 </project>
