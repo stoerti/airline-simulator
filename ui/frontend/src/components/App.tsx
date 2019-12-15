@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import {TrendingUp, Flight} from '@material-ui/icons/';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import FlightTrackerPage from './flighttracker/FlightTrackerPage';
@@ -82,7 +82,7 @@ export default function App() {
 				<AppBar position='fixed' className={classes.appBar}>
 					<Toolbar>
 						<Typography variant='h6' noWrap>
-							Clipped drawer
+							Airline Simulator
           </Typography>
 					</Toolbar>
 				</AppBar>
@@ -96,11 +96,11 @@ export default function App() {
 					<div className={classes.toolbar} />
 					<List>
 						<ListItem button component={Link} to='/flighttracker'>
-							<ListItemIcon><InboxIcon /></ListItemIcon>
+							<ListItemIcon><TrendingUp /></ListItemIcon>
 							<ListItemText primary={'Flighttracker'} />
 						</ListItem>
 						<ListItem button component={Link} to='/flightbookings'>
-							<ListItemIcon><InboxIcon /></ListItemIcon>
+							<ListItemIcon><Flight /></ListItemIcon>
 							<ListItemText primary={'Flightbooking'} />
 						</ListItem>
 					</List>

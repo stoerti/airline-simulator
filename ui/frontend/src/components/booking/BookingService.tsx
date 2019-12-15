@@ -1,3 +1,11 @@
+import { Moment } from 'moment';
+
+export class FlightFilter {
+  airportFrom: string;
+  airportTo: string;
+  flightDate: Moment;
+  flightReturnDate: Moment;
+}
 
 export class AircraftType {
   name: string;
@@ -23,15 +31,9 @@ export class Flight {
   takeoffTime: string;
   duration: number;
   aircraftType: AircraftType;
-  seatsAvailable: number;
-  seatsTaken: number;
-  flightStatus: string;
 }
 
 
 export class FlightSearchResult {
-  page: number;
-  pagesize: number; 
   elements: Flight[];
-  totalElements: number;
 }

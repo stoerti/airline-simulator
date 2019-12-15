@@ -22,6 +22,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +42,7 @@ public class FlightController {
 	public FlightSearchResult getFlights(
 			@RequestParam(name = "airportFrom") String airportFrom,
 			@RequestParam(name = "airportTo") String airportTo,
-			@RequestParam(name = "day") LocalDate flightDay) {
+			@RequestParam(name = "day") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate flightDay) {
 		List<Flight> result = new ArrayList<>();
 		
 		LocalDateTime minTakeoffTime = flightDay.atStartOfDay();

@@ -42,7 +42,7 @@ export default function FlightList() {
   const [filter_flightStatus, setFilter_flightStatus] = React.useState<string | undefined>(undefined);
 
   function reloadFlights() {
-    let url = `http://localhost:8080/flights?page=${encodeURIComponent(page)}&pagesize=${encodeURIComponent(rowsPerPage)}`
+    let url = `http://localhost:9000/flights?page=${encodeURIComponent(page)}&pagesize=${encodeURIComponent(rowsPerPage)}`
     if (filter_airportFrom !== undefined)
       url += '&airportFrom=' + encodeURIComponent(filter_airportFrom)
     if (filter_airportTo)
@@ -67,7 +67,7 @@ export default function FlightList() {
   }, [page, rowsPerPage, filter_airportFrom, filter_airportTo, filter_flightStatus]);
 
   React.useEffect(() => {
-    fetch(`http://localhost:8080/airports?page=0&pagesize=1000`)
+    fetch(`http://localhost:9000/airports?page=0&pagesize=1000`)
       .then(response => response.json())
       .then(data => setAirports(data)
       );
