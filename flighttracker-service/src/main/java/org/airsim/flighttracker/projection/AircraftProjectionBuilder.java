@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Component("bookingAircraftProjectionBuilder")
 @RequiredArgsConstructor
 public class AircraftProjectionBuilder {
 	

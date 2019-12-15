@@ -13,11 +13,6 @@
 		<!-- own projects -->
 		<dependency>
 			<groupId>org.airsim</groupId>
-			<artifactId>agents</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.airsim</groupId>
 			<artifactId>fleet-manager</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -34,11 +29,6 @@
 		<dependency>
 			<groupId>org.airsim</groupId>
 			<artifactId>booking-manager</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.airsim</groupId>
-			<artifactId>flighttracker-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -64,7 +54,6 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
