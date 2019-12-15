@@ -7,12 +7,14 @@ import org.airsim.bookingservice.dto.Airport;
 import org.airsim.bookingservice.dto.AirportSearchResult;
 import org.airsim.bookingservice.projection.jpa.AirportEntity;
 import org.airsim.bookingservice.projection.jpa.AirportRepository;
+import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor

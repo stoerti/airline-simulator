@@ -9,12 +9,15 @@ import org.airsim.flighttracker.projection.jpa.AircraftRepository;
 import org.airsim.flighttracker.projection.jpa.AircraftTypeEntity;
 import org.airsim.flighttracker.projection.jpa.AircraftTypeRepository;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("bookingAircraftProjectionBuilder")
 @RequiredArgsConstructor
+@Slf4j
 public class AircraftProjectionBuilder {
 	
 	private final AircraftTypeRepository aircraftTypeRepository;
@@ -41,5 +44,11 @@ public class AircraftProjectionBuilder {
 				.type(type)
 				.build());
 	}
-
+	
+	@ResetHandler
+	public void reset() {
+		log.info("-- resetted aircraft projection --");
+		aircraftRepository.deleteAll();
+		aircraftTypeRepository.deleteAll();
+	}
 }

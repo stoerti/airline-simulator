@@ -20,6 +20,7 @@ import org.airsim.flighttracker.projection.jpa.FlightRepository;
 import org.airsim.flighttracker.projection.jpa.FlightplanEntity;
 import org.airsim.flighttracker.projection.jpa.FlightplanRepository;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -129,6 +130,13 @@ public class FlightProjectionBuilder {
 				.duration(event.getDuration())
 				.build());
 
+	}
+	
+	@ResetHandler
+	public void reset() {
+		log.info("-- resetted flight projection --");
+		flightRepository.deleteAll();
+		flightplanRepository.deleteAll();
 	}
 
 }
