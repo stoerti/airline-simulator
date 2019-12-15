@@ -45,12 +45,12 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 
 		for (String from : ImmutableList.of("HAM" , "FRA", "MUC", "TXL", "CDG" )) {
 			int j = 0;
-			for (String to : ImmutableList.of( /*"HAM", "FRA", "MUC", "TXL", */"CDG")) {
+			for (String to : ImmutableList.of( "HAM", "FRA", "MUC", "TXL", "CDG")) {
 
 				if (from.equals(to))
 					continue;
 
-				for (int i = 1; i < 2; i++) {
+				for (int i = 0; i < 5; i++) {
 
 					CreateFlightplanCommand flightplanCommand = CreateFlightplanCommand
 						.builder()
@@ -59,10 +59,10 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 						.airportFrom(from)
 						.airportTo(to)
 						.aircraftType("A388")
-						.takeoffTime(LocalTime.now().plusMinutes(j + i * 10).plusMinutes(10))
-						.duration(Duration.ofMinutes(5))
+						.takeoffTime(LocalTime.MIDNIGHT.plusHours(7 + i*2))
+						.duration(Duration.ofHours(1))
 						.validFrom(LocalDate.now())
-						.validTo(LocalDate.now().plusDays(1))
+						.validTo(LocalDate.now().plusWeeks(4))
 						.weekplan(Weekplan.daily())
 						.build();
 					flightnumberCounter++;
