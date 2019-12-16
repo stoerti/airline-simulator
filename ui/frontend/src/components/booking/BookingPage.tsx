@@ -4,11 +4,12 @@ import FlightList from './FlightList';
 import FlightSearchForm from './FlightSearchForm';
 import { FlightFilter } from './BookingService';
 import { FlightSearchResult } from 'components/flighttracker/FlightTrackerService';
+import { CssBaseline, Container } from '@material-ui/core';
 
 export default function BookingPage() {
   const [flights, setFlights] = React.useState<FlightSearchResult>({ elements: [], totalElements: 0, page: 0, pagesize: 0 });
 
-  function onSearch(filter: FlightFilter) {
+  const onSearch = (filter: FlightFilter) => {
     let url = `http://localhost:9100/flights`
     url += '?airportFrom=' + encodeURIComponent(filter.airportFrom)
     url += '&airportTo=' + encodeURIComponent(filter.airportTo)
@@ -20,11 +21,24 @@ export default function BookingPage() {
       );
   }
 
+  const onSelectFlight = (flightId: String) => {
+    fetch('http://localhost:9100/booking', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ customerUuid: '11b69003-e332-4b2a-afcc-087970f0a63a', flightUuids: [flightId] })
+    });
+  }
+
   return (
-    <div>
-      <FlightSearchForm onSubmit={onSearch} />
-      <FlightList flights={flights}/>
-    </div>
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth='md'>
+        <FlightSearchForm onSubmit={onSearch} />
+        <FlightList flights={flights} onSelectFlight={onSelectFlight} />
+      </Container>
+    </React.Fragment>
   );
 }
 

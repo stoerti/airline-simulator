@@ -10,6 +10,7 @@ import org.airsim.api.booking.command.CreateBookingCommand;
 import org.airsim.api.booking.command.FlightBooking;
 import org.airsim.bookingservice.dto.BookingRequest;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BookingController {
 
 	private final CommandGateway commandGateway;

@@ -9,6 +9,10 @@ export class FlightFilter {
 
 export class AircraftType {
   name: string;
+  code: string;
+  hasWiFi: boolean;
+  hasSeatPower: boolean;
+  hasEntertainment: boolean;
 }
 
 export class Airport {
