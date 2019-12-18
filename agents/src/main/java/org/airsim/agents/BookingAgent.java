@@ -36,7 +36,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 @AllArgsConstructor
 @Slf4j
 public class BookingAgent {

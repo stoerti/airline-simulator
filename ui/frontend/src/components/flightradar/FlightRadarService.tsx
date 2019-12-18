@@ -1,35 +1,42 @@
 
-export class AircraftType {
+export interface AircraftType {
   name: string;
 }
 
-export class Airport {
+export interface Airport {
   iataCode: string;
   city: string;
+  location: GeoPosition;
 }
 
-export class AirportSearchResult {
+export interface GeoPosition {
+  latitude: number;
+  longitude: number;
+}
+
+export interface AirportSearchResult {
   page: number;
   pagesize: number;
   elements: Airport[];
   totalElements: number;
 }
 
-export class Flight {
+export interface Flight {
   id: string;
   flightNumber: string;
   airportFrom: Airport;
   airportTo: Airport;
   takeoffTime: string;
   duration: number;
-  aircraftType: AircraftType;
   seatsAvailable: number;
   seatsTaken: number;
   flightStatus: string;
+  positionLatitude: number;
+  positionLongitude: number;
 }
 
 
-export class FlightSearchResult {
+export interface FlightSearchResult {
   page: number;
   pagesize: number; 
   elements: Flight[];

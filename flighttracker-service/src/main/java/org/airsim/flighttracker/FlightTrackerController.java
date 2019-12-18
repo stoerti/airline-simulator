@@ -85,6 +85,48 @@ public class FlightTrackerController {
 				searchResult.getTotalElements());
 	}
 
+
+	@GetMapping(value = "/flights/airborne")
+	public FlightSearchResult getAiredFlights(
+			@RequestParam("page") int page,
+			@RequestParam("pagesize") int pagesize) {
+		List<Flight> result = new ArrayList<>();
+		
+		FlightEntity flightExample = new FlightEntity();
+		flightExample.setFlightStatus(FlightStatus.IN_AIR);
+		
+		Example<FlightEntity> example = Example.of(flightExample);
+
+		Page<FlightEntity> searchResult = flightRepository
+			.findAll(example, PageRequest.of(page, pagesize, Sort.by("takeoffTime").ascending()));
+
+		searchResult.forEach(flight -> {
+			AirportEntity airportEntityFrom = airportRepository.findByIataCode(flight.getAirportFrom());
+			AirportEntity airportEntityTo = airportRepository.findByIataCode(flight.getAirportTo());
+			AircraftTypeEntity aircraftType = aircraftTypeRepository.findByCode(flight.getAircraftTypeCode());
+
+			result
+				.add(Flight
+					.builder()
+					.id(flight.getId())
+					.flightNumber(flight.getFlightNumber())
+					.flightStatus(flight.getFlightStatus())
+					.airportFrom(convert(airportEntityFrom))
+					.airportTo(convert(airportEntityTo))
+					.takeoffTime(flight.getTakeoffTime())
+					.duration(flight.getDuration())
+					.aircraftType(convert(aircraftType))
+					.seatsAvailable(flight.getSeatsAvailable())
+					.seatsTaken(flight.getSeatsTaken())
+					.positionLatitude(flight.getPositionLatitude() != null ? flight.getPositionLatitude() : 0d)
+					.positionLongitude(flight.getPositionLongitude() != null ? flight.getPositionLongitude() : 0d)
+					.build());
+		});
+
+		return new FlightSearchResult(result, searchResult.getNumber(), searchResult.getSize(),
+				searchResult.getTotalElements());
+	}
+
 	@GetMapping(value = "/airports")
 	public AirportSearchResult getAirports(@RequestParam("page") int page, @RequestParam("pagesize") int pagesize) {
 		List<Airport> result = new ArrayList<>();

@@ -5,7 +5,7 @@ export default function AirportMarker(props: any) {
     const { color, name, id } = props;
 
     return (
-        <div className='airport'
+        <div className='aircraft'
              style={{ backgroundColor: color, cursor: 'pointer'}}
              title={name}
         />

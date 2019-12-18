@@ -23,4 +23,6 @@ public class AirportEntity {
 	private UUID id;
 
 	private String iataCode;
+	
+	private GlobalPosition location;
 }

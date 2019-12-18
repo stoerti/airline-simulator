@@ -50,7 +50,7 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 				if (from.equals(to))
 					continue;
 
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 1; i++) {
 
 					CreateFlightplanCommand flightplanCommand = CreateFlightplanCommand
 						.builder()
@@ -59,10 +59,10 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 						.airportFrom(from)
 						.airportTo(to)
 						.aircraftType("A388")
-						.takeoffTime(LocalTime.MIDNIGHT.plusHours(7 + i*2))
+						.takeoffTime(LocalTime.now().plusMinutes(1))
 						.duration(Duration.ofHours(1))
 						.validFrom(LocalDate.now())
-						.validTo(LocalDate.now().plusWeeks(4))
+						.validTo(LocalDate.now().plusWeeks(1))
 						.weekplan(Weekplan.daily())
 						.build();
 					flightnumberCounter++;
@@ -149,5 +149,4 @@ public class InitialDataAgent implements ApplicationListener<ContextRefreshedEve
 			}
 		}
 	}
-
 }

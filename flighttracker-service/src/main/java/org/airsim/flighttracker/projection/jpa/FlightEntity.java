@@ -35,4 +35,7 @@ public class FlightEntity {
 	private FlightStatus flightStatus;
 	private Integer seatsAvailable;
 	private Integer seatsTaken;
+	
+	private Double positionLatitude;
+	private Double positionLongitude;
 }

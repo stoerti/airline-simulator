@@ -12,6 +12,7 @@ import org.airsim.api.flight.command.CompleteBoarding;
 import org.airsim.api.flight.command.CompleteCheckIn;
 import org.airsim.api.flight.command.CompleteFlight;
 import org.airsim.api.flight.command.CreateFlightCommand;
+import org.airsim.api.flight.command.MoveFlyingAircraftCommand;
 import org.airsim.api.flight.command.StartBoarding;
 import org.airsim.api.flight.command.StartCheckIn;
 import org.airsim.api.flight.command.StartFlight;
@@ -22,6 +23,7 @@ import org.airsim.api.flight.event.CheckInStarted;
 import org.airsim.api.flight.event.FlightCompleted;
 import org.airsim.api.flight.event.FlightCreated;
 import org.airsim.api.flight.event.FlightStarted;
+import org.airsim.api.flight.event.FlyingAircraftMoved;
 import org.airsim.api.flight.event.SeatsAllocated;
 import org.airsim.api.flight.exception.FlightSoldOutException;
 import org.axonframework.commandhandling.CommandHandler;
@@ -99,6 +101,12 @@ public class FlightAggregate {
 		log.info("Complete flight for flight " + flightId);
 		apply(new FlightCompleted(flightId));
 	}
+	
+	@CommandHandler
+	public void on(MoveFlyingAircraftCommand command) {
+		log.info("Move flight " + flightId + " to (" + command.getLatitude() + ", " + command.getLongitude() + ")");
+		apply(new FlyingAircraftMoved(flightId, command.getLatitude(), command.getLongitude()));
+	}	
 
 	@EventSourcingHandler
 	public void on(FlightCreated event) {

@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import {TrendingUp, Flight} from '@material-ui/icons/';
+import { TrendingUp, Flight } from '@material-ui/icons/';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import FlightTrackerPage from './flighttracker/FlightTrackerPage';
@@ -114,7 +114,7 @@ export default function App() {
 					<div>
 						<Route path='/' exact component={IndexPage} />
 						<Route path='/flightradar' component={FlightRadarPage} />
-						<Route path='/flighttracker' component={FlightRadarPage} />
+						<Route path='/flighttracker' component={FlightTrackerPage} />
 						<Route path='/flightbookings' component={BookingPage} />
 					</div>
 				</main>

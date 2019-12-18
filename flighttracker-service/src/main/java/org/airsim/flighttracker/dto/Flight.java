@@ -33,4 +33,7 @@ public class Flight {
 	private FlightStatus flightStatus;
 	private int seatsAvailable;
 	private int seatsTaken;
+	
+	private double positionLatitude;
+	private double positionLongitude;
 }

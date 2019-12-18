@@ -13,6 +13,7 @@ import org.airsim.api.flight.event.CheckInStarted;
 import org.airsim.api.flight.event.FlightCompleted;
 import org.airsim.api.flight.event.FlightCreated;
 import org.airsim.api.flight.event.FlightStarted;
+import org.airsim.api.flight.event.FlyingAircraftMoved;
 import org.airsim.api.flight.event.SeatsAllocated;
 import org.airsim.api.flightplan.FlightplanCreated;
 import org.airsim.flighttracker.projection.jpa.FlightEntity;
@@ -129,6 +130,19 @@ public class FlightProjectionBuilder {
 				.takeoffTime(event.getTakeoffTime())
 				.duration(event.getDuration())
 				.build());
+
+	}
+
+	@EventHandler
+	@Transactional
+	public void on(FlyingAircraftMoved event) {
+		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
+			log.info("Move flight " + event.getFlightId() + " to (" + event.getLatitude() + ", " + event.getLongitude() + ")");
+			flight.setPositionLatitude(event.getLatitude());
+			flight.setPositionLongitude(event.getLongitude());
+			flightRepository.save(flight);
+		});
+
 
 	}
 	

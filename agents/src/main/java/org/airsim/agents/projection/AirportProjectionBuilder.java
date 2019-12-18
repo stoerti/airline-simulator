@@ -24,6 +24,7 @@ public class AirportProjectionBuilder {
 		airportRepository.save(AirportEntity.builder()
 				.id(event.getId())
 				.iataCode(event.getIataCode())
+				.location(event.getLocation())
 				.build());
 	}
 	

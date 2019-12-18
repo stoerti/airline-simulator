@@ -2,6 +2,7 @@ package org.airsim.agents;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-//@Component
+@Component
 @AllArgsConstructor
 @Slf4j
 public class FlightOperatorAgent {
@@ -37,22 +38,22 @@ public class FlightOperatorAgent {
 
 	@EventHandler
 	public void on(FlightCreated event) {
-		scheduler
-			.schedule(() -> startCheckin(event.getId()), convertToLocalInstant(event.getTakeoffTime())
-				.minusSeconds(CHECKIN_OPEN_STARTTIME - ((long) (Math.random() * 20))));
-		scheduler
-			.schedule(() -> completeCheckin(event.getId()),
-					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(CHECKIN_CLOSE_STARTTIME - ((long) (Math.random() * 20))));
-		scheduler
-			.schedule(() -> startBoarding(event.getId()),
-					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(BOARDING_OPEN_STARTTIME - ((long) (Math.random() * 20))));
-		scheduler
-			.schedule(() -> completeBoarding(event.getId()),
-					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(BOARDING_CLOSE_STARTTIME - ((long) (Math.random() * 20))));
-		scheduler.schedule(() -> startFlight(event.getId()), convertToLocalInstant(event.getTakeoffTime().plusSeconds(((long) (Math.random() * 20)))));
+//		scheduler
+//			.schedule(() -> startCheckin(event.getId()), convertToLocalInstant(event.getTakeoffTime())
+//				.minusSeconds(CHECKIN_OPEN_STARTTIME - ((long) (Math.random() * 20))));
+//		scheduler
+//			.schedule(() -> completeCheckin(event.getId()),
+//					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(CHECKIN_CLOSE_STARTTIME - ((long) (Math.random() * 20))));
+//		scheduler
+//			.schedule(() -> startBoarding(event.getId()),
+//					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(BOARDING_OPEN_STARTTIME - ((long) (Math.random() * 20))));
+//		scheduler
+//			.schedule(() -> completeBoarding(event.getId()),
+//					convertToLocalInstant(event.getTakeoffTime()).minusSeconds(BOARDING_CLOSE_STARTTIME - ((long) (Math.random() * 20))));
+		scheduler.schedule(() -> startFlight(event.getId()), convertToLocalInstant(event.getTakeoffTime()));
 		scheduler
 			.schedule(() -> completeFlight(event.getId()),
-					convertToLocalInstant(event.getTakeoffTime()).plus(event.getDuration()).plusSeconds((long) (Math.random() * 20)));
+					convertToLocalInstant(event.getTakeoffTime()).plus(event.getDuration()));
 	}
 
 	private void startCheckin(UUID flightId) {
@@ -86,7 +87,7 @@ public class FlightOperatorAgent {
 	}
 
 	private Instant convertToLocalInstant(LocalDateTime dateTime) {
-		return dateTime.toInstant(ZoneOffset.of("+02:00"));
+		return dateTime.atZone(ZoneId.systemDefault()).toInstant();
 	}
 
 }
