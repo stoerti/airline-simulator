@@ -14,7 +14,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import FlightTrackerPage from './flighttracker/FlightTrackerPage';
 import BookingPage from './booking/BookingPage';
-import { Path } from 'history';
+import FlightRadarPage from './flightradar/FlightRadarPage';
 
 const drawerWidth = 240;
 
@@ -99,6 +99,10 @@ export default function App() {
 							<ListItemIcon><TrendingUp /></ListItemIcon>
 							<ListItemText primary={'Flighttracker'} />
 						</ListItem>
+						<ListItem button component={Link} to='/flightradar'>
+							<ListItemIcon><TrendingUp /></ListItemIcon>
+							<ListItemText primary={'Flightradar'} />
+						</ListItem>
 						<ListItem button component={Link} to='/flightbookings'>
 							<ListItemIcon><Flight /></ListItemIcon>
 							<ListItemText primary={'Flightbooking'} />
@@ -109,7 +113,8 @@ export default function App() {
 					<div className={classes.toolbar} />
 					<div>
 						<Route path='/' exact component={IndexPage} />
-						<Route path='/flighttracker' component={FlightTrackerPage} />
+						<Route path='/flightradar' component={FlightRadarPage} />
+						<Route path='/flighttracker' component={FlightRadarPage} />
 						<Route path='/flightbookings' component={BookingPage} />
 					</div>
 				</main>
