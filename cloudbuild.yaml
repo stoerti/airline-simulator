@@ -4,4 +4,4 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/airline-simulator/runner', '.']
   dir: 'runner'
-images: ['gcr.io/airline-simulator/runner']
+images: ['eu.gcr.io/airline-simulato-1576656353216/runner']
