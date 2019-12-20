@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/mvn'
-  args: ['package']
+  args: ['package', '-B', '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/airline-simulator/runner', '.']
   dir: 'runner'
