@@ -28,7 +28,7 @@ public class FlightProjectionBuilder {
 	private FlightplanRepository flightplanRepository;
 
 	@EventHandler
-	@Transactional
+	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
 	public void onNewFlight(FlightCreated event) {
 		Optional<FlightplanEntity> optionalFlightplan = flightplanRepository.findById(event.getFlightplanId());
 
@@ -52,7 +52,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
 	public void on(SeatsAllocated event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Increasing seat allocations of flight " + flight.getFlightNumber() + " by " + event.getNumberOfSeats());
@@ -62,7 +62,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
 	public void on(CheckInStarted event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Changing status of flight " + flight.getFlightNumber() + " to notBookable");
@@ -72,7 +72,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
 	public void onNewFlightplan(FlightplanCreated event) {
 		flightplanRepository
 			.save(FlightplanEntity
@@ -88,6 +88,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@ResetHandler
+	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted flight projection --");
 		flightplanRepository.deleteAll();

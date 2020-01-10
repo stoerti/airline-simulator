@@ -4,6 +4,7 @@ import GoogleMapReact from 'google-map-react';
 import AirportMarker from './AirportMarker';
 import AircraftMarker from './AircraftMarker';
 import { AirportSearchResult, FlightSearchResult } from './FlightRadarService';
+import { API_KEY } from './ApiKey';
 import { Button } from '@material-ui/core';
 
 function useInterval(callback: any, delay: number) {
@@ -59,7 +60,7 @@ export default function FlightRadarPage(props: any) {
                 Reload
             </Button>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyCadQ_BABqRuirB9uSZdm6jTm7HEG3IqhA' }}
+                bootstrapURLKeys={{ key: API_KEY }}
                 defaultCenter={center}
                 defaultZoom={zoom}
             >

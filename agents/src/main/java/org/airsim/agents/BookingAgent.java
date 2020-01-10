@@ -36,7 +36,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-//@Component
+@Component
 @AllArgsConstructor
 @Slf4j
 public class BookingAgent {
@@ -48,9 +48,9 @@ public class BookingAgent {
 	private final CommandGateway commandGateway;
 
 	// all times relevant to start time
-	private static final long NUMBER_OF_BOOKINGS_PER_CYCLE = 50;
+	private static final long NUMBER_OF_BOOKINGS_PER_CYCLE = 20;
 
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(fixedRate = 5000)
 	public void scheduleBookings() {
 		List<CustomerEntity> customers = new ArrayList<>();
 		customerRepository.findAll().forEach(c -> customers.add(c));

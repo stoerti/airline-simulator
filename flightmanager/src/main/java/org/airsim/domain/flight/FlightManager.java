@@ -30,7 +30,7 @@ public class FlightManager {
 				.flightplanId(event.getId())
 				.takeoffTime(LocalDateTime.of(currentDate, event.getTakeoffTime()))
 				.duration(event.getDuration())
-				.seatsAvailable(100)
+				.seatsAvailable(200)
 				.build();
 			
 			commandGateway.send(command);
