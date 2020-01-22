@@ -1,13 +1,13 @@
 package org.airsim.bookingservice.projection;
 
-import javax.transaction.Transactional;
-
 import org.airsim.api.aircrafttype.AircraftTypeCreated;
 import org.airsim.bookingservice.projection.jpa.AircraftTypeEntity;
 import org.airsim.bookingservice.projection.jpa.AircraftTypeRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class AircraftProjectionBuilder {
 	private final AircraftTypeRepository aircraftTypeRepository;
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AircraftTypeCreated event) {
 		aircraftTypeRepository.save(AircraftTypeEntity.builder()
 				.id(event.getId())
@@ -30,6 +30,7 @@ public class AircraftProjectionBuilder {
 	}
 	
 	@ResetHandler
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted aircraftType projection --");
 		aircraftTypeRepository.deleteAll();

@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "RU_AIRPORT")
+@Table(name = "RU_AIRCRAFTTYPE")
 public class AircraftTypeEntity {
 
 	@Id

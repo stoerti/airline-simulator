@@ -3,8 +3,6 @@ package org.airsim.flighttracker.projection;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
-
 import org.airsim.api.flight.FlightStatus;
 import org.airsim.api.flight.event.BoardingCompleted;
 import org.airsim.api.flight.event.BoardingStarted;
@@ -24,6 +22,8 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +38,7 @@ public class FlightProjectionBuilder {
 	private FlightplanRepository flightplanRepository;
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlight(FlightCreated event) {
 		Optional<FlightplanEntity> optionalFlightplan = flightplanRepository.findById(event.getFlightplanId());
 
@@ -63,7 +63,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(SeatsAllocated event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Increasing seat allocations of flight " + flight.getFlightNumber() + " by " + event.getNumberOfSeats());
@@ -73,37 +73,37 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CheckInStarted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.CHECKIN_OPEN);
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CheckInCompleted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.CHECKIN_CLOSED);
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(BoardingStarted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.BOARDING);
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(BoardingCompleted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.BOARDING_COMPLETED);
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(FlightStarted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.IN_AIR);
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(FlightCompleted event) {
 		changeFlightStatus(event.getFlightId(), FlightStatus.LANDED);
 	}
@@ -117,7 +117,7 @@ public class FlightProjectionBuilder {
 	}
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlightplan(FlightplanCreated event) {
 		flightplanRepository
 			.save(FlightplanEntity
@@ -134,7 +134,7 @@ public class FlightProjectionBuilder {
 	}
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(FlyingAircraftMoved event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.info("Move flight " + event.getFlightId() + " to (" + event.getLatitude() + ", " + event.getLongitude() + ")");
@@ -147,6 +147,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@ResetHandler
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted flight projection --");
 		flightRepository.deleteAll();

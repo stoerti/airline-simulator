@@ -21,14 +21,15 @@ import org.axonframework.eventhandling.DisallowReplay;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 
-@Component
+//@Component
 @AllArgsConstructor
 @Slf4j
 public class FlightOperatorAgent {
@@ -56,7 +57,7 @@ public class FlightOperatorAgent {
 
     @EventHandler
     @DisallowReplay
-    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(CheckInStarted event) {
         FlightEntity flight = flightRepository.findById(event.getFlightId()).get();
         scheduler
@@ -71,7 +72,7 @@ public class FlightOperatorAgent {
 
     @EventHandler
     @DisallowReplay
-    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(CheckInCompleted event) {
         FlightEntity flight = flightRepository.findById(event.getFlightId()).get();
         scheduler
@@ -86,7 +87,7 @@ public class FlightOperatorAgent {
 
     @EventHandler
     @DisallowReplay
-    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(BoardingStarted event) {
         FlightEntity flight = flightRepository.findById(event.getFlightId()).get();
         scheduler
@@ -101,7 +102,7 @@ public class FlightOperatorAgent {
 
     @EventHandler
     @DisallowReplay
-    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(BoardingCompleted event) {
         FlightEntity flight = flightRepository.findById(event.getFlightId()).get();
         scheduler.schedule(() -> startFlight(event.getFlightId()), convertToLocalInstant(flight.getTakeoffTime()));
@@ -114,7 +115,7 @@ public class FlightOperatorAgent {
 
     @EventHandler
     @DisallowReplay
-    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(FlightStarted event) {
         FlightEntity flight = flightRepository.findById(event.getFlightId()).get();
         scheduler

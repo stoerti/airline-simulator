@@ -15,8 +15,8 @@ import org.airsim.projection.jpa.CustomerRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,11 +24,11 @@ import javax.transaction.Transactional;
 public class ProjectionBuilder {
 
 	private final AirportRepository airportRepository;
-	private final AircraftTypeRepository aircraftRepository;
+	private final AircraftTypeRepository aircraftTypeRepository;
 	private final CustomerRepository customerRepository;
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AirportCreated event) {
 		airportRepository.save(AirportEntity.builder()
 				.id(event.getId())
@@ -37,16 +37,16 @@ public class ProjectionBuilder {
 	}
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AircraftTypeCreated event) {
-		aircraftRepository.save(AircraftTypeEntity.builder()
+		aircraftTypeRepository.save(AircraftTypeEntity.builder()
 				.id(event.getId())
 				.code(event.getCode())
 				.build());
 	}
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CustomerCreated event) {
 		customerRepository.save(CustomerEntity.builder()
 				.id(event.getId())
@@ -60,7 +60,7 @@ public class ProjectionBuilder {
 	public void reset() {
 		log.info("-- resetted projection --");
 		airportRepository.deleteAll();
-		aircraftRepository.deleteAll();
+		aircraftTypeRepository.deleteAll();
 		customerRepository.deleteAll();
 	}
 }

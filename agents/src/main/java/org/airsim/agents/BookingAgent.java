@@ -48,9 +48,9 @@ public class BookingAgent {
 	private final CommandGateway commandGateway;
 
 	// all times relevant to start time
-	private static final long NUMBER_OF_BOOKINGS_PER_CYCLE = 20;
+	private static final long NUMBER_OF_BOOKINGS_PER_CYCLE = 5;
 
-	@Scheduled(fixedRate = 5000)
+	@Scheduled(fixedRate = 500)
 	public void scheduleBookings() {
 		List<CustomerEntity> customers = new ArrayList<>();
 		customerRepository.findAll().forEach(c -> customers.add(c));
@@ -102,7 +102,8 @@ public class BookingAgent {
 						.flightBookingId(UUID.randomUUID())
 						.flightId(flights.get(0).getId())
 						.passenger(Passenger.builder()
-								.id(customer.getId())
+								.id(UUID.randomUUID())
+								.customerId(customer.getId())
 								.name(customer.getName())
 								.lastname(customer.getLastName())
 								.build())
@@ -111,7 +112,8 @@ public class BookingAgent {
 						.flightBookingId(UUID.randomUUID())
 						.flightId(returnFlights.get(0).getId())
 						.passenger(Passenger.builder()
-								.id(customer.getId())
+								.id(UUID.randomUUID())
+								.customerId(customer.getId())
 								.name(customer.getName())
 								.lastname(customer.getLastName())
 								.build())

@@ -1,19 +1,16 @@
 package org.airsim.agents.projection;
 
-import lombok.extern.slf4j.Slf4j;
 import org.airsim.agents.projection.jpa.CustomerEntity;
 import org.airsim.agents.projection.jpa.CustomerRepository;
-import org.airsim.agents.projection.jpa.FlightplanEntity;
 import org.airsim.api.customer.CustomerCreated;
-import org.airsim.api.flight.event.CheckInStarted;
-import org.airsim.api.flight.event.SeatsAllocated;
-import org.airsim.api.flightplan.FlightplanCreated;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -23,7 +20,7 @@ public class CustomerProjectionBuilder {
     private CustomerRepository customerRepository;
 
     @EventHandler
-    @Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(CustomerCreated event) {
         customerRepository.save(CustomerEntity.builder()
                 .id(event.getId())
@@ -33,6 +30,7 @@ public class CustomerProjectionBuilder {
     }
 
     @ResetHandler
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void reset() {
         log.info("-- resetted customer projection --");
         customerRepository.deleteAll();

@@ -1,7 +1,5 @@
 package org.airsim.flighttracker.projection;
 
-import javax.transaction.Transactional;
-
 import org.airsim.api.aircraft.AircraftCreated;
 import org.airsim.api.aircrafttype.AircraftTypeCreated;
 import org.airsim.flighttracker.projection.jpa.AircraftEntity;
@@ -11,6 +9,8 @@ import org.airsim.flighttracker.projection.jpa.AircraftTypeRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class AircraftProjectionBuilder {
 	private final AircraftRepository aircraftRepository;
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AircraftTypeCreated event) {
 		aircraftTypeRepository.save(AircraftTypeEntity.builder()
 				.id(event.getId())
@@ -34,7 +34,7 @@ public class AircraftProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AircraftCreated event) {
 		AircraftTypeEntity type = aircraftTypeRepository.findById(event.getType()).orElseThrow(() ->new IllegalStateException());
 		
@@ -46,6 +46,7 @@ public class AircraftProjectionBuilder {
 	}
 	
 	@ResetHandler
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted aircraft projection --");
 		aircraftRepository.deleteAll();

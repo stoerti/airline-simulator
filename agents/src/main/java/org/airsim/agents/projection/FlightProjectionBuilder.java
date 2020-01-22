@@ -13,8 +13,9 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Component
@@ -28,7 +29,7 @@ public class FlightProjectionBuilder {
 	private FlightplanRepository flightplanRepository;
 
 	@EventHandler
-	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlight(FlightCreated event) {
 		Optional<FlightplanEntity> optionalFlightplan = flightplanRepository.findById(event.getFlightplanId());
 
@@ -52,7 +53,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(SeatsAllocated event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Increasing seat allocations of flight " + flight.getFlightNumber() + " by " + event.getNumberOfSeats());
@@ -62,7 +63,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CheckInStarted event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Changing status of flight " + flight.getFlightNumber() + " to notBookable");
@@ -72,7 +73,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlightplan(FlightplanCreated event) {
 		flightplanRepository
 			.save(FlightplanEntity
@@ -88,7 +89,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@ResetHandler
-	@Transactional(value = Transactional.TxType.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted flight projection --");
 		flightplanRepository.deleteAll();

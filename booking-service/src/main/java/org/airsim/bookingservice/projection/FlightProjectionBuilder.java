@@ -1,18 +1,9 @@
 package org.airsim.bookingservice.projection;
 
 import java.util.Optional;
-import java.util.UUID;
 
-import javax.transaction.Transactional;
-
-import org.airsim.api.flight.FlightStatus;
-import org.airsim.api.flight.event.BoardingCompleted;
-import org.airsim.api.flight.event.BoardingStarted;
-import org.airsim.api.flight.event.CheckInCompleted;
 import org.airsim.api.flight.event.CheckInStarted;
-import org.airsim.api.flight.event.FlightCompleted;
 import org.airsim.api.flight.event.FlightCreated;
-import org.airsim.api.flight.event.FlightStarted;
 import org.airsim.api.flight.event.SeatsAllocated;
 import org.airsim.api.flightplan.FlightplanCreated;
 import org.airsim.bookingservice.projection.jpa.FlightEntity;
@@ -23,6 +14,8 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +30,7 @@ public class FlightProjectionBuilder {
 	private FlightplanRepository flightplanRepository;
 
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlight(FlightCreated event) {
 		Optional<FlightplanEntity> optionalFlightplan = flightplanRepository.findById(event.getFlightplanId());
 
@@ -62,7 +55,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(SeatsAllocated event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Increasing seat allocations of flight " + flight.getFlightNumber() + " by " + event.getNumberOfSeats());
@@ -72,7 +65,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CheckInStarted event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
 			log.debug("Changing status of flight " + flight.getFlightNumber() + " to notBookable");
@@ -82,7 +75,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlightplan(FlightplanCreated event) {
 		flightplanRepository
 			.save(FlightplanEntity
@@ -99,6 +92,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@ResetHandler
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted flight projection --");
 		flightplanRepository.deleteAll();

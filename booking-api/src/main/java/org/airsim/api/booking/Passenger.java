@@ -12,6 +12,7 @@ import lombok.Value;
 public class Passenger {
 
 	private final UUID id;
+	private final UUID customerId;
 	
 	private final String name;
 	private final String lastname;
