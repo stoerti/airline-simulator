@@ -12,6 +12,7 @@ import org.airsim.api.flightplan.FlightplanCreated;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class FlightProjectionBuilder {
 	private FlightplanRepository flightplanRepository;
 
 	@EventHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlight(FlightCreated event) {
 		Optional<FlightplanEntity> optionalFlightplan = flightplanRepository.findById(event.getFlightplanId());
@@ -53,6 +55,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(SeatsAllocated event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
@@ -63,6 +66,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(CheckInStarted event) {
 		flightRepository.findById(event.getFlightId()).ifPresent(flight -> {
@@ -73,6 +77,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@EventHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onNewFlightplan(FlightplanCreated event) {
 		flightplanRepository
@@ -89,6 +94,7 @@ public class FlightProjectionBuilder {
 	}
 	
 	@ResetHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted flight projection --");

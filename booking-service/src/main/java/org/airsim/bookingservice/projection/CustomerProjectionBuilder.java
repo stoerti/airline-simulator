@@ -1,12 +1,11 @@
-package org.airsim.agents.projection;
+package org.airsim.bookingservice.projection;
 
-import org.airsim.agents.projection.jpa.CustomerEntity;
-import org.airsim.agents.projection.jpa.CustomerRepository;
 import org.airsim.api.customer.CustomerCreated;
+import org.airsim.bookingservice.projection.jpa.CustomerEntity;
+import org.airsim.bookingservice.projection.jpa.CustomerRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ public class CustomerProjectionBuilder {
     private CustomerRepository customerRepository;
 
     @EventHandler
-    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void on(CustomerCreated event) {
         customerRepository.save(CustomerEntity.builder()
@@ -32,7 +30,6 @@ public class CustomerProjectionBuilder {
     }
 
     @ResetHandler
-    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void reset() {
         log.info("-- resetted customer projection --");

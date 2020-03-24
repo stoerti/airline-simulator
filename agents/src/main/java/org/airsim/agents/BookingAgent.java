@@ -20,6 +20,14 @@ import org.airsim.api.flight.command.StartFlight;
 import org.airsim.api.flight.event.FlightCreated;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
+import org.quartz.Job;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.TriggerBuilder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,10 +35,12 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -39,7 +49,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class BookingAgent {
+public class BookingAgent implements Job {
 
 	private final CustomerRepository customerRepository;
 	private final AirportRepository airportRepository;
@@ -49,8 +59,30 @@ public class BookingAgent {
 
 	// all times relevant to start time
 	private static final long NUMBER_OF_BOOKINGS_PER_CYCLE = 5;
+	
+	private final Scheduler jobScheduler;
+	private final JobDetail startCheckinJobDetail;
+	
+	
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		log.info("Something scheduled");
+		
+		try {
+			jobScheduler.scheduleJob(TriggerBuilder
+				.newTrigger()
+				.withIdentity(UUID.randomUUID().toString())
+				.forJob(startCheckinJobDetail)
+				.withDescription("Sample trigger")
+				.withSchedule(SimpleScheduleBuilder.simpleSchedule().withRepeatCount(0))
+				.startAt(Date.from(LocalDateTime.now().plusSeconds(10).atZone( ZoneId.systemDefault()).toInstant()))
+				.build());
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
-	@Scheduled(fixedRate = 500)
+//	@Scheduled(fixedRate = 500)
 	public void scheduleBookings() {
 		List<CustomerEntity> customers = new ArrayList<>();
 		customerRepository.findAll().forEach(c -> customers.add(c));

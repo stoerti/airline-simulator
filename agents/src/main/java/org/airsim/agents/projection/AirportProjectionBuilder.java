@@ -7,6 +7,7 @@ import org.airsim.agents.projection.jpa.AirportRepository;
 import org.airsim.api.airport.AirportCreated;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.ResetHandler;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class AirportProjectionBuilder {
 	private final AirportRepository airportRepository;
 	
 	@EventHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void on(AirportCreated event) {
 		airportRepository.save(AirportEntity.builder()
@@ -30,6 +32,7 @@ public class AirportProjectionBuilder {
 	}
 	
 	@ResetHandler
+    @Order(1)
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void reset() {
 		log.info("-- resetted airport projection --");
