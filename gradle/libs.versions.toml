@@ -1,0 +1,90 @@
+[versions]
+springBoot = "2.6.4"
+jib = "3.2.0"
+junit5 = "5.8.2"
+axon = "4.5.8"
+swagger = "2.9.2"
+jaeger = "3.3.1"
+opentracingSpringCloud = "0.5.9"
+lombok = "6.4.1"
+
+[libraries]
+
+postgresql = { module = "org.postgresql:postgresql", version = "42.2.24" }
+spring-boot-admin = { module = "de.codecentric:spring-boot-admin-starter-client", version = "2.1.6" }
+
+spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-quartz = { module = "org.springframework.boot:spring-boot-starter-quartz" }
+
+jaeger-starter = { module = "io.opentracing.contrib:opentracing-spring-jaeger-web-starter", version.ref = "jaeger" }
+tracing-spring-cloud-starter = { module = "io.opentracing.contrib:opentracing-spring-cloud-starter", version.ref = "opentracingSpringCloud" }
+
+hibernate-java8 = { module = "org.hibernate:hibernate-java8" }
+hibernate-core = { module = "org.hibernate:hibernate-core" }
+hibernate-types = { module = "com.vladmihalcea:hibernate-types-52", version = "2.10.2" }
+
+swagger2 = { module = "io.springfox:springfox-swagger2", version.ref = "swagger" }
+swagger-ui = { module = "io.springfox:springfox-swagger-ui", version.ref = "swagger" }
+
+axon-spring-starter = { module = "org.axonframework:axon-spring-boot-starter", version.ref = "axon" }
+axon-modelling = { module = "org.axonframework:axon-modelling", version.ref = "axon" }
+
+h2 = { module = "com.h2database:h2" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.11" }
+guava = { module = "com.google.guava:guava" }
+commons-io = { module = "commons-io:commons-io", version = "2.6" }
+validation-api = { module = "javax.validation:validation-api", version = "2.0.1.Final" }
+lombok = { module = "org.projectlombok:lombok", version = "1.18.22" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
+jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version = "1.1.0" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
+
+spring-boot-test = { module = "org.springframework.boot:spring-boot-test" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+mockito-core = { module = "org.mockito:mockito-core" }
+hamcrest-core = { module = "org.hamcrest:hamcrest-core" }
+assertj-core = { module = "org.assertj:assertj-core", version = "3.22.0" }
+
+junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
+junit5-mockito = { module = "org.mockito:mockito-junit-jupiter", version = "4.3.1" }
+
+[bundles]
+junit5 = [
+    "junit5-mockito",
+    "junit5-api",
+    "junit5-params"
+]
+test = [
+    "assertj-core",
+    "mockito-core",
+    "hamcrest-core"
+]
+jackson = [
+    "jackson-datatype-money",
+    "jackson-core",
+    "jackson-annotations",
+    "jackson-databind",
+    "jackson-dataformat-xml",
+]
+spring-boot-starter = [
+    "spring-boot-actuator",
+    "spring-boot-web",
+    "spring-boot-data-jpa",
+    "jaeger-starter",
+    "tracing-spring-cloud-starter"
+]
+swagger = [
+    "swagger2",
+    "swagger-ui"
+]
+
+[plugins]
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
