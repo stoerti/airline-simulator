@@ -6,10 +6,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":flight-api"))
-    api(project(":fleet-api"))
-    api(project(":customer-api"))
-    api(project(":booking-api"))
+    api(project(":flight:flight-api"))
+    api(project(":fleet:fleet-api"))
+    api(project(":customer:customer-api"))
+    api(project(":booking:booking-api"))
 
     implementation(libs.bundles.spring.boot.starter)
     implementation(libs.bundles.swagger)

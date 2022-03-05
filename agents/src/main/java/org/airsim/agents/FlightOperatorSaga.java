@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.airsim.agents.projection.jpa.AirportRepository;
 import org.airsim.agents.projection.jpa.FlightEntity;
 import org.airsim.agents.projection.jpa.FlightRepository;
-import org.airsim.api.flight.event.CheckInCompleted;
 import org.airsim.api.flight.event.FlightCompleted;
 import org.airsim.api.flight.event.FlightStarted;
 import org.airsim.api.flight.event.FlyingAircraftMoved;
@@ -17,7 +16,6 @@ import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.modelling.saga.SagaEventHandler;
 import org.axonframework.modelling.saga.SagaLifecycle;
 import org.axonframework.modelling.saga.StartSaga;
-import org.axonframework.spring.stereotype.Saga;
 import org.gavaghan.geodesy.GlobalPosition;
 import org.springframework.beans.factory.annotation.Autowired;
 

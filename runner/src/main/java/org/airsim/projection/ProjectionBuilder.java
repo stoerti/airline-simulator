@@ -2,7 +2,6 @@ package org.airsim.projection;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.airsim.api.aircraft.AircraftCreated;
 import org.airsim.api.aircrafttype.AircraftTypeCreated;
 import org.airsim.api.airport.AirportCreated;
 import org.airsim.api.customer.CustomerCreated;

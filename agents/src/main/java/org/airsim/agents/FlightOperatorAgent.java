@@ -1,6 +1,5 @@
 package org.airsim.agents;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -25,7 +24,6 @@ import org.axonframework.eventhandling.DisallowReplay;
 import org.axonframework.eventhandling.EventHandler;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.TriggerBuilder;
 import org.springframework.core.annotation.Order;
