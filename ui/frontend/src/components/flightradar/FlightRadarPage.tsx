@@ -5,7 +5,7 @@ import AirportMarker from './AirportMarker';
 import AircraftMarker from './AircraftMarker';
 import { AirportSearchResult, FlightSearchResult } from './FlightRadarService';
 import { API_KEY } from './ApiKey';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 function useInterval(callback: any, delay: number) {
     const savedCallback = useRef();

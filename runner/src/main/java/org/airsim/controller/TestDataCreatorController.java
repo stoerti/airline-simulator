@@ -1,6 +1,5 @@
 package org.airsim.controller;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import org.airsim.api.aircrafttype.CreateAircraftTypeCommand;
@@ -15,16 +14,21 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.gavaghan.geodesy.GlobalPosition;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -37,8 +41,6 @@ public class TestDataCreatorController {
     private final AircraftTypeRepository aircraftTypeRepository;
     private final AirportRepository airportRepository;
     private final CustomerRepository customerRepository;
-    
-    private final List<String> activeAirports = Arrays.asList("HAM", "FRA", "MUC", "TXL", "CDG"/*, "AMS", "LHR", "DUS"*/);
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -62,117 +64,83 @@ public class TestDataCreatorController {
 
     @GetMapping("/flights")
     public void createFlights() {
-        Integer flightnumberCounter = 1;
-
-        for (String from : activeAirports) {
-            int j = 0;
-            for (String to : activeAirports) {
-                if (from.equals(to)) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource("testdata/flights.tsv").getFile()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isBlank()) {
                     continue;
                 }
 
-                for (int i = 8; i < 23; i++) {
+                String[] lineData = line.split("\\s+");
+                String from = lineData[0];
+                String to = lineData[1];
+                Weekplan weekdays = Weekplan.fromString(lineData[2]);
+                LocalTime timeStart = LocalTime.parse(lineData[3]);
+                LocalTime timeEnd = LocalTime.parse(lineData[4]);
+                String flightNo = lineData[5];
+                String aircraftCode = lineData[6];
 
-                    CreateFlightplanCommand flightplanCommand = CreateFlightplanCommand
-                            .builder()
-                            .id(UUID.randomUUID())
-                            .flightnumber("AS" + Strings.padStart(flightnumberCounter.toString(), 3, '0'))
-                            .airportFrom(from)
-                            .airportTo(to)
-                            .aircraftType("A388")
-                            .takeoffTime(LocalTime.now().plusHours(i).plusMinutes(new Random().nextInt(10) - 5))
-                            .duration(Duration.ofHours(1))
-                            .validFrom(LocalDate.now())
-                            .validTo(LocalDate.now().plusWeeks(3))
-                            .weekplan(Weekplan.daily())
-                            .build();
-                    flightnumberCounter++;
-                    j++;
-                    commandGateway.send(flightplanCommand);
-                }
+                CreateFlightplanCommand flightplanCommand = CreateFlightplanCommand
+                        .builder()
+                        .id(UUID.randomUUID())
+                        .flightnumber(flightNo)
+                        .airportFrom(from)
+                        .airportTo(to)
+                        .aircraftType("A388")
+                        .takeoffTime(timeStart)
+                        .duration(Duration.between(timeStart, timeEnd))
+                        .validFrom(LocalDate.now())
+                        .validTo(LocalDate.now().plusWeeks(3))
+                        .weekplan(weekdays)
+                        .build();
+                commandGateway.send(flightplanCommand);
+                // process the line.
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     @GetMapping("/airports")
     public void createAirports() {
+        List<CreateAirportCommand> commands = new ArrayList<>();
 
-        List<CreateAirportCommand> commands = Arrays.asList(CreateAirportCommand
+        try (BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource("testdata/airports.csv").getFile()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                String[] lineData = line.split(",");
+                String iataCode = lineData[0].trim();
+                String airportName = lineData[1].trim();
+                String cityName = lineData[2].trim();
+                double posLatitude = Double.parseDouble(lineData[3].trim());
+                double posLongitude = Double.parseDouble(lineData[4].trim());
+                double elevation = Double.parseDouble(lineData[4].trim());
+
+                commands.add(CreateAirportCommand
                         .builder()
                         .id(UUID.randomUUID())
-                        .iataCode("HAM")
-                        .name("Hamburg Airport")
-                        .fullName("Hamburg Airport")
-                        .city("Hamburg")
-                        .location(new GlobalPosition(53.630278d, 9.991111d, 0d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("TXL")
-                        .name("Berlin Tegel")
-                        .fullName("Berlin Tegel")
-                        .city("Berlin")
-                        .location(new GlobalPosition(52.559722d, 13.287778, 37d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("FRA")
-                        .name("Frankfurt Airport")
-                        .fullName("Frankfurt Airport")
-                        .city("Frankfurt")
-                        .location(new GlobalPosition(50.033333d, 8.570556d, 111d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("MUC")
-                        .name("München Airport")
-                        .fullName("München Airport")
-                        .city("München")
-                        .location(new GlobalPosition(48.353889d, 11.786111d, 453d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("CDG")
-                        .name("Charles de Gaulle Airport")
-                        .fullName("Charles de Gaulle Airport")
-                        .city("Paris")
-                        .location(new GlobalPosition(49.009722d, 2.547778d, 119d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("LHR")
-                        .name("London Heathrow Airport")
-                        .fullName("London Heathrow Airport")
-                        .city("London")
-                        .location(new GlobalPosition(51.4775d, -0.461389d, 25d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("AMS")
-                        .name("Schipol Airport")
-                        .fullName("Schipol Airport")
-                        .city("Amsterdam")
-                        .location(new GlobalPosition(52.308056d, 4.764167d, -3d))
-                        .build(),
-                CreateAirportCommand
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .iataCode("DUS")
-                        .name("Düsseldorf Airport")
-                        .fullName("Düsseldorf Airport")
-                        .city("Düsseldorf")
-                        .location(new GlobalPosition(51.289444d, 6.766667d, 119d))
+                        .iataCode(iataCode)
+                        .name(airportName)
+                        .fullName(airportName)
+                        .city(cityName)
+                        .location(new GlobalPosition(posLatitude, posLongitude, elevation))
                         .build());
+                // process the line.
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         for (CreateAirportCommand command : commands) {
-            if (activeAirports.contains(command.getIataCode()) && airportRepository.findByIataCode(command.getIataCode()) == null) {
+            if (airportRepository.findByIataCode(command.getIataCode()) == null) {
                 commandGateway.send(command);
             }
         }

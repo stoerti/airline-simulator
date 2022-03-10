@@ -4,7 +4,8 @@ import FlightList from './FlightList';
 import FlightSearchForm from './FlightSearchForm';
 import { FlightFilter } from './BookingService';
 import { FlightSearchResult } from 'components/flighttracker/FlightTrackerService';
-import { CssBaseline, Container } from '@material-ui/core';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 
 export default function BookingPage() {
   const [flights, setFlights] = React.useState<FlightSearchResult>({ elements: [], totalElements: 0, page: 0, pagesize: 0 });

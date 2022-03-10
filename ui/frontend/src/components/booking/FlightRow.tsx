@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@mui/styles';
+import Paper from '@mui/material/Paper';
 
 import { Flight } from './BookingService';
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@mui/material';
 import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    padding: theme.spacing(2),
+//    padding: theme.spacing(2),
     margin: 'auto',
-    marginBottom: theme.spacing(3)
+//    marginBottom: theme.spacing(3)
   },
   button: {
     margin: 'auto'
@@ -55,7 +55,7 @@ export default function FlightRow(props: FlightRowProps) {
           </Typography>
         </Grid>
         <Grid item>
-          <Button onClick={e => props.onSelectFlight(props.flight.id)} variant='contained' color='primary' className={classes.button}>Select flight</Button>
+          <Button onClick={() => props.onSelectFlight(props.flight.id)} variant='contained' color='primary' className={classes.button}>Select flight</Button>
         </Grid>
       </Grid>
     </Paper>

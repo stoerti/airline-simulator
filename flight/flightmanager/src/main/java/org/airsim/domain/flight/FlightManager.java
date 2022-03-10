@@ -17,25 +17,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FlightManager {
 
-	@Autowired
-	private CommandGateway commandGateway;
+    @Autowired
+    private CommandGateway commandGateway;
 
-	@EventHandler
-	public void onFlightPlanCreated(FlightplanCreated event) {
-		for (LocalDate currentDate = event.getValidFrom(); currentDate
-			.isBefore(event.getValidTo().plusDays(1)); currentDate = currentDate.plusDays(1)) {
-			CreateFlightCommand command = CreateFlightCommand
-				.builder()
-				.id(UUID.randomUUID())
-				.flightplanId(event.getId())
-				.takeoffTime(LocalDateTime.of(currentDate, event.getTakeoffTime()))
-				.duration(event.getDuration())
-				.seatsAvailable(200)
-				.build();
-			
-			commandGateway.send(command);
-		}
+    @EventHandler
+    public void onFlightPlanCreated(FlightplanCreated event) {
+        for (LocalDate currentDate = event.getValidFrom(); currentDate
+                .isBefore(event.getValidTo().plusDays(1)); currentDate = currentDate.plusDays(1)) {
+            if (event.getWeekplan().appliesTo(currentDate)) {
+                CreateFlightCommand command = CreateFlightCommand
+                        .builder()
+                        .id(UUID.randomUUID())
+                        .flightplanId(event.getId())
+                        .takeoffTime(LocalDateTime.of(currentDate, event.getTakeoffTime()))
+                        .duration(event.getDuration())
+                        .seatsAvailable(200)
+                        .build();
 
-	}
-
+                commandGateway.send(command);
+            }
+        }
+    }
 }

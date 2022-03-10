@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@mui/styles';
 
 import { FlightSearchResult } from './BookingService';
 import FlightRow from './FlightRow';
@@ -11,10 +10,10 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   paper: {
-    marginTop: theme.spacing(3),
+//    marginTop: theme.spacing(3),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2)
+//    marginBottom: theme.spacing(2)
   },
   table: {
     minWidth: 650
